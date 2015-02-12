@@ -24,7 +24,12 @@ public class DataSource implements JRDataSource {
 
     public DataSource(String json) {
         JsonParser parser = new JsonParser();
-        JsonObject root = parser.parse(json).getAsJsonObject();
+        JsonObject root;
+        try {
+            root = parser.parse(json).getAsJsonObject();
+        } catch (Exception e) {
+            throw new RuntimeException("bad json: " + json, e);
+        }
         JsonArray fields = root.getAsJsonArray("fields");
         for(int i = 0; i < fields.size(); i++) {
             fieldColumns.put(fields.get(i).getAsString(), i);
