@@ -1,5 +1,8 @@
 package edu.ku.brc.specify.reports;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.sf.jasperreports.engine.*;
 
 import javax.servlet.ServletException;
@@ -28,9 +31,15 @@ public class ReportServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String reportStr = request.getParameter("report");
         String data = request.getParameter("data");
+        String parameters = request.getParameter("parameters");
         ByteArrayInputStream reportIS = new ByteArrayInputStream(reportStr.getBytes(StandardCharsets.UTF_8));
         JRDataSource dataSource = new DataSource(data);
+        JsonParser parser = new JsonParser();
         Map<String, Object> params = new HashMap<>();
+        JsonObject parametersParsed = parser.parse(parameters).getAsJsonObject();
+        for (Map.Entry<String, JsonElement> entry : parametersParsed.entrySet()) {
+            params.put(entry.getKey(), entry.getValue().getAsString());
+        }
 
         byte[] pdf;
         try {
