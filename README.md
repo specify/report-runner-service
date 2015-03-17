@@ -16,5 +16,10 @@ Fonts
 =====
 Unless the report runner service is provided with the fonts used in a report it will use built-in PDF fonts. The consequences range in severity from slight differences in appearance to rendered text overflowing bounding boxes resulting in truncation.
 
-Instructions for creating a jar file providing all necessary fonts will be forthcoming.
+To provide fonts to be used by this service, a font extension jar file
+can be added to `src/main/webapp/WEB-INF/lib/` before compiling. There
+is a good description of creating the font extension file at
+http://javaskeleton.blogspot.com/2010/12/embedding-fonts-into-pdf-generated-by.html
+If you follow the iReport instructions in that guide, be sure to
+include the variants (italic, bold and bold italic) for each font added. 
 
