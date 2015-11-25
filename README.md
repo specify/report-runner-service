@@ -23,3 +23,18 @@ http://javaskeleton.blogspot.com/2010/12/embedding-fonts-into-pdf-generated-by.h
 If you follow the iReport instructions in that guide, be sure to
 include the variants (italic, bold and bold italic) for each font added. 
 
+Running as a service
+=====================
+To start the report runner service automatically, we use the following *Upstart* script:
+```
+# Upstart example script
+description "Specify Report Service"
+author "Ben Anhalt <anhalt@ku.edu>"
+
+start on net-device-up
+
+setuid anhalt
+
+chdir /home/anhalt/minimal-reports/
+exec mvn jetty:run
+```
