@@ -60,7 +60,9 @@ Missing Barcode Text
 When running with a headless JRE, there is a bug in the barbecue
 barcode generation library that prevents the text value of a barcode
 from be included even if that option is turned on in the report
-definition. The bug has been fixed in the
+definition. The bug has been
+[fixed](https://github.com/barbecue-sf/barbecue/commit/420f362ac2348b8a7cbb056e5d920317ce0a0ce1)
+in the
 [barbecue repository](https://github.com/barbecue-sf/barbecue) in an
 unreleased version, *1.9-dev*. The solution is to clone the barbecue
 repository locally and build and install the maven artifact.
