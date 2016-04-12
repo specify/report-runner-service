@@ -39,20 +39,22 @@ include the variants (italic, bold and bold italic) for each font added.
 
 Running as a service
 =====================
-To start the report runner service automatically, we use the following
-*Upstart* script:
-
+Use the following *SystemD* script to start report runner service
+ps: change User and home path to your needs.
 ```
-# Upstart example script
-description "Specify Report Service"
-author "Ben Anhalt <anhalt@ku.edu>"
+[Unit]
+Description=Specify Report Runner Service 
+# Author Job Diogenes Ribeiro Borges
+Wants=network.target
+ConditionPathExists=/home/specify/report-runner-service
 
-start on net-device-up
+[Service]
+User=specify
+WorkingDirectory=/home/specify/report-runner-service
+ExecStart=/usr/bin/mvn jetty:run
 
-setuid anhalt
-
-chdir /home/anhalt/minimal-reports/
-exec mvn jetty:run
+[Install]
+Alias=ireportrunner.service
 ```
 
 Missing Barcode Text
