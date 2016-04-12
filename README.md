@@ -40,7 +40,8 @@ include the variants (italic, bold and bold italic) for each font added.
 Running as a service
 =====================
 Use the following *SystemD* script to start report runner service
-ps: change User and home path to your needs.
+
+PS: change User and home path to your needs.
 ```
 [Unit]
 Description=Specify Report Runner Service 
