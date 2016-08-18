@@ -1,6 +1,7 @@
 package edu.ku.brc.specify.config;
 
 import net.sf.jasperreports.engine.JRDefaultScriptlet;
+import org.apache.commons.lang.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -181,5 +182,20 @@ public class Scriptlet extends JRDefaultScriptlet {
         {
             return floatVal.floatValue() > 0.0 ? SCRPLT_E : SCRPLT_W;
         }
+    }
+
+    public String deaggregateFirst(final String aggregated, final String separator)
+    {
+        String[] split = StringUtils.split(aggregated, separator, 2);
+        if (split == null) return "";
+        return split[0];
+    }
+
+    public String deaggregateSecondary(final String aggregated, final String separator)
+    {
+        String [] split = StringUtils.split(aggregated, separator, 2);
+        if (split == null) return "";
+        if (split.length < 2) return "";
+        return split[1];
     }
 }
