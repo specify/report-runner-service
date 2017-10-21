@@ -49,8 +49,8 @@
         <dependency>
             <groupId>net.sourceforge.barbecue</groupId>
             <artifactId>barbecue</artifactId>
-            <!-- <version>1.5-beta1</version> -->
-            <version>1.9-dev</version>
+            <version>1.5-beta1</version>
+            <!-- <version>1.9-dev</version> -->
         </dependency>
 	<dependency>
 	  <groupId>com.google.zxing</groupId>
