@@ -2,6 +2,8 @@
 This project implements a simple web service wrapper around the Jasper
 Reports libraries for report and label generation in Specify 7.
 
+[![Build Status](https://travis-ci.org/specify/report-runner-service.svg?branch=master)](https://travis-ci.org/specify/report-runner-service)
+
 Requirements
 ============
 * Java JDK >= 1.7
