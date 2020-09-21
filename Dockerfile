@@ -1,26 +1,15 @@
-FROM ubuntu:18.04 AS common
+FROM maven AS build
 
 LABEL maintainer="Specify Collections Consortium <github.com/specify>"
 
-RUN apt-get update && apt-get -y install --no-install-recommends \
-        openjdk-11-jdk-headless \
-        maven
+RUN mkdir -p /tmp/build
 
-RUN groupadd -g 999 specify && \
-        useradd -r -u 999 -g specify specify
+COPY . /tmp/build
 
-RUN mkdir -p /home/specify && chown specify.specify /home/specify
+WORKDIR /tmp/build
 
-COPY --chown=specify:specify . /home/specify/report-runner
+RUN mvn package
 
-USER specify
-WORKDIR /home/specify/report-runner
+FROM jetty AS run
 
-RUN mvn compile
-
-# this causes maven to install jetty so it will be in the container
-RUN mvn jetty:help
-
-RUN sed -i s/localhost/0.0.0.0/ jetty.xml
-
-CMD mvn jetty:run
+COPY --from=build /tmp/build/target/*.war /var/lib/jetty/webapps/ROOT.war
