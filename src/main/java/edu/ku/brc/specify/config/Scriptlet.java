@@ -66,7 +66,7 @@ public class Scriptlet extends JRDefaultScriptlet {
                 monthCount++;
             }
 
-            loanLength = String.format(monthCount == 1 ? "Month" : "Months", monthCount);
+            loanLength = String.format(monthCount == 1 ? "%d Month" : "%d Months", monthCount);
         }
         return loanLength;
     }
