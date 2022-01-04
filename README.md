@@ -35,7 +35,15 @@ can be added to `src/main/webapp/WEB-INF/lib/` before compiling. There
 is a good description of creating the font extension file at
 http://javaskeleton.blogspot.com/2010/12/embedding-fonts-into-pdf-generated-by.html
 If you follow the iReport instructions in that guide, be sure to
-include the variants (italic, bold and bold italic) for each font added. 
+include the variants (italic, bold and bold italic) for each font added.
+
+If using the report runner in a Docker container, the font extension
+jar can be mounted into the container using a volume directive such
+as:
+
+```
+docker run -p 8080 --name report-runner -d -v ./report-fonts.jar:/var/lib/jetty/webapps/ROOT/WEB-INF/lib/report-fonts.jar specifyconsortium/report-runner
+```
 
 Running as a service
 =====================
