@@ -197,5 +197,9 @@ public class Scriptlet extends JRDefaultScriptlet {
         if (split == null) return "";
         if (split.length < 2) return "";
         return split[1];
+    }    
+    
+    public String toProperCase(String str) {
+    	return StringUtils.capitaliseAllWords(str.toLowerCase());
     }
 }
