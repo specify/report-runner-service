@@ -1,14 +1,15 @@
 # Specify Report Runner Service
+
 This project implements a simple web service wrapper around the Jasper
 Reports libraries for report and label generation in Specify 7.
 
-Requirements
-============
-* Java JDK >= 1.7
-* Apache Maven 2 
+## Requirements
 
-Test Service
-============
+- Java JDK >= 1.7 (never versions work too)
+- Apache Maven 2 or 3
+
+## Test Service
+
 After cloning the repository, build with `mvn compile`. The test
 server can be started using the Maven Jetty plugin: `mvn
 jetty:run`. The service will run on port `8080` on `localhost`
@@ -23,12 +24,13 @@ In the Specify 7 (development branch) settings file, typically
 restart. A *Reports* task will now be available on the taskbar at the
 top of the Specify 7 web application.
 
-Fonts
-=====
+## Fonts
+
 Unless the report runner service is provided with the fonts used in a
 report it will use built-in PDF fonts. The consequences range in
 severity from slight differences in appearance to rendered text
-overflowing bounding boxes resulting in truncation.
+overflowing bounding boxes resulting in truncation to report runner throwing
+exceptions.
 
 To provide fonts to be used by this service, a font extension jar file
 can be added to `src/main/webapp/WEB-INF/lib/` before compiling. There
@@ -45,11 +47,12 @@ as:
 docker run -p 8080 --name report-runner -d -v ./report-fonts.jar:/var/lib/jetty/webapps/ROOT/WEB-INF/lib/report-fonts.jar specifyconsortium/report-runner
 ```
 
-Running as a service
-=====================
+## Running as a service
+
 Use the following *SystemD* script to start report runner service
 
 PS: change User and home path to your needs.
+
 ```
 [Unit]
 Description=Specify Report Runner Service 
@@ -66,8 +69,8 @@ ExecStart=/usr/bin/mvn jetty:run
 Alias=ireportrunner.service
 ```
 
-Missing Barcode Text
-====================
+## Missing Barcode Text
+
 When running with a headless JRE, there is a bug in the barbecue
 barcode generation library that prevents the text value of a barcode
 from be included even if that option is turned on in the report
