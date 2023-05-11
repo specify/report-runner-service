@@ -1,4 +1,4 @@
-FROM maven AS build
+FROM arm64v8/maven:3.9.1-eclipse-temurin-8 AS build-report-runner
 
 LABEL maintainer="Specify Collections Consortium <github.com/specify>"
 
@@ -18,6 +18,6 @@ RUN mvn compile && mvn war:exploded
 COPY src /tmp/build/src
 RUN mvn compile && mvn war:exploded
 
-FROM jetty AS run
+FROM arm64v8/jetty:9.4.51-jdk8-eclipse-temurin AS run-report-runner
 
-COPY --from=build /tmp/build/target/minimal_reports* /var/lib/jetty/webapps/ROOT
+COPY --from=build-report-runner /tmp/build/target/minimal_reports* /var/lib/jetty/webapps/ROOT
