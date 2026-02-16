@@ -12,7 +12,7 @@ COPY pom.xml /tmp/build
 # maven to download all the dependencies so they get cached in a
 # docker layer and don't have to be downloaded anytime there is a
 # change in the source code.
-RUN mvn -DskipTests package
+RUN mvn -q -DskipTests dependency:go-offline
 
 # Do the actual build.
 COPY src /tmp/build/src
