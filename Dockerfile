@@ -18,6 +18,6 @@ RUN mvn compile && mvn war:exploded
 COPY src /tmp/build/src
 RUN mvn compile && mvn war:exploded
 
-FROM tomcat:9.0-jre8 AS run
+FROM jetty:9.4-jre8 AS run
 
-COPY --from=build /tmp/build/target/minimal_reports /usr/local/tomcat/webapps/ROOT
+COPY --from=build /tmp/build/target/minimal_reports* /var/lib/jetty/webapps/ROOT
