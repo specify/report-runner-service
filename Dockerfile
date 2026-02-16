@@ -12,12 +12,12 @@ COPY pom.xml /tmp/build
 # maven to download all the dependencies so they get cached in a
 # docker layer and don't have to be downloaded anytime there is a
 # change in the source code.
-RUN mvn compile && mvn war:exploded
+RUN mvn -DskipTests package
 
 # Do the actual build.
 COPY src /tmp/build/src
-RUN mvn compile && mvn war:exploded
+RUN mvn -DskipTests package
 
 FROM jetty:9.4-jre8 AS run
 
-COPY --from=build /tmp/build/target/minimal_reports* /var/lib/jetty/webapps/ROOT
+COPY --from=build /tmp/build/target/*.war /var/lib/jetty/webapps/ROOT.war
