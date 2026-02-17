@@ -93,6 +93,21 @@ docker compose start
 docker compose down
 ```
 
+### Use Docker Hub Image
+
+For production environments, it is not necessary to build the image yourself.
+You can simply fetch it from Docker Hub with a configuration like this one:
+
+```yml
+services:
+  report-runner:
+    container_name: report-runner
+    image: specifyconsortium/report-runner # No building needed!
+    restart: unless-stopped
+    ports:
+      - "${REPORT_RUNNER_BIND_IP}:${REPORT_RUNNER_PORT}:8080"
+```
+
 ## Running as a service
 
 Use the following *SystemD* script to start report runner service
