@@ -16,8 +16,8 @@ RUN mvn -q -DskipTests dependency:go-offline
 
 # Do the actual build.
 COPY src /tmp/build/src
-RUN mvn -DskipTests package
+RUN mvn -DskipTests war:exploded
 
 FROM jetty:9.4-jre8 AS run
 
-COPY --from=build /tmp/build/target/*.war /var/lib/jetty/webapps/ROOT.war
+COPY --from=build /tmp/build/target/minimal_reports-1.0-SNAPSHOT/ /var/lib/jetty/webapps/ROOT/
