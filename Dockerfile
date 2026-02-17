@@ -16,7 +16,7 @@ RUN mvn -q -DskipTests dependency:go-offline
 
 # Do the actual build.
 COPY src /tmp/build/src
-RUN mvn -DskipTests war:exploded
+RUN mvn -DskipTests compile war:exploded
 
 FROM jetty:9.4-jre8 AS run
 
