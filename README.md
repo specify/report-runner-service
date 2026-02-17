@@ -47,6 +47,51 @@ as:
 docker run -p 8080 --name report-runner -d -v ./report-fonts.jar:/var/lib/jetty/webapps/ROOT/WEB-INF/lib/report-fonts.jar specifyconsortium/report-runner
 ```
 
+## Deployment (Docker Compose)
+
+This repository includes a `docker-compose.yml` file that replaces
+manual `docker run` commands.
+
+### 1. Build and start
+
+Copy `.env.example` to `.env` and update values for your host:
+
+```
+cp .env.example .env
+```
+
+Then edit `.env` in the repository root to set deployment values:
+
+```
+REPORT_RUNNER_BIND_IP=172.31.30.34
+REPORT_RUNNER_PORT=8080
+```
+
+You will likely want to add [custom fonts](https://discourse.specifysoftware.org/t/specify-report-runner-fonts/1659), which you can do so by adding a
+Jasper font-extension jar file to either to your `.env` file as a path, or by directly mounting it as a file in the `docker-compose.yml` file. By default,
+there are only two volumes commented, one for [standard fonts](https://discourse.specifysoftware.org/t/specify-report-runner-fonts/1659#p-3113-adding-fonts-2) and
+one for Google Fonts, which need to be [packaged manually using Jaspersoft Studio](https://discourse.specifysoftware.org/t/adding-custom-fonts-to-the-report-runner/2809).
+
+```yml
+    volumes:
+      - "${FONTS_JAR}:/var/lib/jetty/webapps/ROOT/WEB-INF/lib/report-fonts.jar:ro"
+      - "${GOOGLE_FONTS_JAR}:/var/lib/jetty/webapps/ROOT/WEB-INF/lib/google-fonts.jar:ro"
+```
+
+Then start and build from the main directory:
+
+```
+docker compose up -d --build
+```
+
+### 2. Stop or restart
+
+```
+docker compose stop
+docker compose start
+docker compose down
+```
+
 ## Running as a service
 
 Use the following *SystemD* script to start report runner service

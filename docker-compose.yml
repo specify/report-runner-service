@@ -1,0 +1,12 @@
+services:
+  report-runner:
+    container_name: report-runner
+    image: sp7cloud-report-runner
+    build:
+      context: .
+    restart: unless-stopped
+    ports:
+      - "${REPORT_RUNNER_BIND_IP}:${REPORT_RUNNER_PORT}:8080"
+    # volumes:
+    #   - "${FONTS_JAR}:/var/lib/jetty/webapps/ROOT/WEB-INF/lib/report-fonts.jar:ro"
+    #   - "${GOOGLE_FONTS_JAR}:/var/lib/jetty/webapps/ROOT/WEB-INF/lib/google-fonts.jar:ro"
