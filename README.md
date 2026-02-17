@@ -72,6 +72,7 @@ Jasper font-extension jar file to either to your `.env` file as a path, or by di
 there are only two volumes commented, one for [standard fonts](https://discourse.specifysoftware.org/t/specify-report-runner-fonts/1659#p-3113-adding-fonts-2) and
 one for Google Fonts, which need to be [packaged manually using Jaspersoft Studio](https://discourse.specifysoftware.org/t/adding-custom-fonts-to-the-report-runner/2809).
 
+If you add these fonts, make sure to uncomment the lines in the `docker-compose.yml` file:
 ```yml
     volumes:
       - "${FONTS_JAR}:/var/lib/jetty/webapps/ROOT/WEB-INF/lib/report-fonts.jar:ro"
