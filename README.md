@@ -5,15 +5,27 @@ Reports libraries for report and label generation in Specify 7.
 
 ## Requirements
 
-- Java JDK >= 1.7 (never versions work too)
-- Apache Maven 2 or 3
+- Java JDK 21
+- Apache Maven 3.9.6 or newer
+
+The production image uses Jetty 12.1 with Java 21 and the Java EE 8
+deployment environment. This preserves the application's `javax.servlet`
+API, `/report` endpoint, existing JasperReports 6 templates, 100 MB form
+limit, and `/var/lib/jetty/webapps/ROOT/WEB-INF/lib/` custom-font mounts.
+JasperReports and the other report libraries are unchanged by this runtime
+migration; their security updates still require a separate dependency review.
 
 ## Test Service
 
-After cloning the repository, build with `mvn compile`. The test
-server can be started using the Maven Jetty plugin: `mvn
+After cloning the repository, build and run integration tests with
+`mvn verify`. The tests start the packaged application on Jetty EE8,
+submit JRXML, data, and parameters, and verify the text in the resulting
+PDF. They also decode a QR code rendered in the PDF and check a form
+larger than Jetty's default 200 KB limit.
+The test server can be started using the Maven Jetty plugin: `mvn
 jetty:run`. The service will run on port `8080` on `localhost`
-adapter. These values can be changed in `jetty.xml`. Because there is
+adapter. These values can be changed in the Jetty plugin's `httpConnector`
+configuration in `pom.xml`. Because there is
 no authentication, the report service should run on the same machine
 as the Specify 7 server or on a private subnet and only bind an
 address that is not routed externally.
@@ -83,6 +95,40 @@ Then start and build from the main directory:
 
 ```
 docker compose up -d --build
+```
+
+### Runtime updates and validation
+
+Refresh base images when building a security update:
+
+```bash
+docker compose build --pull --no-cache report-runner
+docker compose up -d --no-deps report-runner
+docker compose exec report-runner java -version
+docker compose logs --tail=100 report-runner
+```
+
+The builder is pinned to Maven 3.10.0 / Java 21 and the runtime to Jetty
+12.1.14 / Java 21. Update the Jetty image tag and `jetty.version` in
+`pom.xml` together when adopting a new Jetty patch. A rebuild refreshes
+the Java 21 base available under that tag, but cannot fix dependencies
+whose versions remain pinned to vulnerable releases.
+
+Before production deployment, test representative collection reports and
+labels, including barcodes and custom fonts. Record the new image digest
+and confirm scanner findings against that image. Keep the old image in a
+controlled rollback location until validation completes; after the cutover,
+remove retired local images through Docker rather than deleting its storage
+directories. Rollback to a Java 8 image restores its old vulnerabilities.
+
+Publishing a replacement image does not update a running KU container.
+From its existing Specify Cloud Compose directory, pull and recreate only
+the report runner after the new image is published:
+
+```bash
+docker compose pull report-runner
+docker compose up -d --no-deps report-runner
+docker compose exec report-runner java -version
 ```
 
 ### 2. Stop or restart

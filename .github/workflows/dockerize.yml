@@ -6,7 +6,20 @@ on:
   workflow_dispatch:
 
 jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Verify packaged report rendering on Jetty EE8
+        run: mvn -B -ntp verify
+
   dockerize:
+    needs: verify
     uses: specify/workflows/.github/workflows/dockerize.yml@main
     with:
       registry-service: specifyconsortium/report-runner
