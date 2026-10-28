@@ -121,16 +121,6 @@ controlled rollback location until validation completes; after the cutover,
 remove retired local images through Docker rather than deleting its storage
 directories. Rollback to a Java 8 image restores its old vulnerabilities.
 
-Publishing a replacement image does not update a running KU container.
-From its existing Specify Cloud Compose directory, pull and recreate only
-the report runner after the new image is published:
-
-```bash
-docker compose pull report-runner
-docker compose up -d --no-deps report-runner
-docker compose exec report-runner java -version
-```
-
 ### 2. Stop or restart
 
 ```
