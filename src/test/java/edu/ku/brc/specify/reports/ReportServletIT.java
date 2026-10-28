@@ -23,6 +23,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.Base64;
 
 import static org.junit.Assert.*;
 
@@ -105,6 +106,27 @@ public class ReportServletIT {
             BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(
                 new BufferedImageLuminanceSource(image)));
             assertEquals("Specimen 123", new MultiFormatReader().decode(bitmap).getText());
+        }
+    }
+
+    @Test
+    public void rendersSvgUsingAlignedBatikDependencies() throws Exception {
+        String svg = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"80\" height=\"80\">"
+            + "<rect width=\"80\" height=\"80\" fill=\"blue\"/></svg>";
+        String image = """
+            <image scaleImage="FillFrame">
+                <reportElement x="0" y="35" width="80" height="80"/>
+                <imageExpression><![CDATA[new java.io.ByteArrayInputStream(
+                    java.util.Base64.getDecoder().decode("%s"))]]></imageExpression>
+            </image>
+            """.formatted(Base64.getEncoder().encodeToString(svg.getBytes(StandardCharsets.UTF_8)));
+        String report = REPORT.replace("band height=\"40\"", "band height=\"120\"")
+            .replace("</band>", image + "</band>");
+        HttpResponse<byte[]> response = postReport(report);
+        assertPdf(response);
+        try (PDDocument pdf = Loader.loadPDF(response.body())) {
+            var rendered = new PDFRenderer(pdf).renderImageWithDPI(0, 72);
+            assertEquals(0x0000ff, rendered.getRGB(40, 75) & 0xffffff);
         }
     }
 
