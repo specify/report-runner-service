@@ -12,8 +12,8 @@ The production image uses Jetty 12.1 with Java 21 and the Java EE 8
 deployment environment. This preserves the application's `javax.servlet`
 API, `/report` endpoint, existing JasperReports 6 templates, 100 MB form
 limit, and `/var/lib/jetty/webapps/ROOT/WEB-INF/lib/` custom-font mounts.
-JasperReports and the other report libraries are unchanged by this runtime
-migration; their security updates still require a separate dependency review.
+JasperReports, Batik, and XML Graphics Commons were changed in this PR; their
+security updates still require a separate dependency review.
 
 ## Test Service
 
