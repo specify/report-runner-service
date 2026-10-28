@@ -18,7 +18,7 @@ RUN mvn -q -DskipTests dependency:go-offline
 COPY src /tmp/build/src
 RUN mvn -B -ntp -DskipTests package
 
-FROM jetty:12.1.14-jdk21 AS run
+FROM jetty:12.1.14-jdk21-amazoncorretto AS run
 
 # Keep the javax.servlet application on the Java EE 8 deployment environment.
 RUN java -jar "$JETTY_HOME/start.jar" --add-modules=ee8-deploy \
