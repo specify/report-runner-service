@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: maven
+    directory: /
+    schedule:
+      interval: daily
+    ignore:
+      - dependency-name: net.sf.jasperreports:jasperreports
+        versions: ["[7.0.0,)"]
+    commit-message:
+      prefix: "fix(deps)"
