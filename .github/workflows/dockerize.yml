@@ -29,7 +29,7 @@ jobs:
         run: mvn -B -ntp verify
 
   dockerize:
-    if: github.event_name != 'schedule'
+    if: github.event_name != 'schedule' && github.event_name != 'workflow_dispatch'
     needs: verify
     uses: specify/workflows/.github/workflows/dockerize.yml@main
     with:
@@ -39,7 +39,7 @@ jobs:
       password: ${{ secrets.DOCKERHUB_TOKEN }}
 
   weekly:
-    if: github.event_name == 'schedule' && github.repository == 'specify/report-runner-service'
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.repository == 'specify/report-runner-service'
     needs: verify
     permissions:
       contents: read
