@@ -25,11 +25,10 @@ FROM jetty:12.1-jdk21-amazoncorretto AS run
 USER root
 RUN if command -v apt-get >/dev/null; then \
       apt-get update \
-      && apt-get install -y --no-install-recommends --only-upgrade libbrotli1 \
-      && dpkg --compare-versions "$(dpkg-query -W -f='${Version}' libbrotli1)" ge '1.1.0-2ubuntu0.1' \
+      && apt-get -y upgrade \
       && rm -rf /var/lib/apt/lists/*; \
-    elif command -v dnf >/dev/null && rpm -q brotli-libs >/dev/null 2>&1; then \
-      dnf -y update brotli-libs \
+    elif command -v dnf >/dev/null; then \
+      dnf -y upgrade \
       && dnf clean all; \
     fi
 
