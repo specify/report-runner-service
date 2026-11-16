@@ -20,8 +20,23 @@ RUN mvn -B -ntp -DskipTests package
 
 FROM jetty:12.1-jdk21-amazoncorretto AS run
 
+# Refresh packages from the base distribution's security repositories. The
+# runtime base may be rebuilt before its package index includes a new fix.
+USER root
+RUN if command -v apt-get >/dev/null; then \
+      apt-get update \
+      && apt-get install -y --no-install-recommends --only-upgrade libbrotli1 \
+      && dpkg --compare-versions "$(dpkg-query -W -f='${Version}' libbrotli1)" ge '1.1.0-2ubuntu0.1' \
+      && rm -rf /var/lib/apt/lists/*; \
+    elif command -v dnf >/dev/null && rpm -q brotli-libs >/dev/null 2>&1; then \
+      dnf -y update brotli-libs \
+      && dnf clean all; \
+    fi
+
 # Keep the javax.servlet application on the Java EE 8 deployment environment.
 RUN java -jar "$JETTY_HOME/start.jar" --add-modules=ee8-deploy \
     && printf 'environment=ee8\n' > "$JETTY_BASE/webapps/ROOT.properties"
 
 COPY --from=build --chown=jetty:jetty /tmp/build/target/minimal_reports-1.0-SNAPSHOT/ /var/lib/jetty/webapps/ROOT/
+
+USER jetty
