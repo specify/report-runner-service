@@ -17,7 +17,7 @@
         <jetty.host>127.0.0.1</jetty.host>
         <jetty.port>8080</jetty.port>
         <jasperreports.version>6.21.5</jasperreports.version>
-        <batik.version>1.18</batik.version>
+        <batik.version>1.20</batik.version>
     </properties>
 
     <repositories>
